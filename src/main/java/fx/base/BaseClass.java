@@ -71,7 +71,7 @@ public class BaseClass {
 		} catch (NoSuchElementException e) {
 			throw new RuntimeException();
 		} catch (Exception e) {
-			throw new RuntimeException();
+			throw new RuntimeException(e);
 		}
 		return null;
 

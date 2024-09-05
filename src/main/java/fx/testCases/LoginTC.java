@@ -8,7 +8,7 @@ import fx.pages.LoginPage;
 public class LoginTC extends SpecificMethods {
 	
 	@Test
-	public void loginFx() {
+	public void loginFx() throws InterruptedException {
 		
 		 new LoginPage()
 		 .userName()

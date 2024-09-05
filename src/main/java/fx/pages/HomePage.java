@@ -13,23 +13,32 @@ import fx.base.BaseClass;
 
 public class HomePage extends BaseClass {
 	
-	public HomePage webPageTitle() {
+	public HomePage webPageTitle() throws InterruptedException {
 		
 		String title = driver.getTitle();
 		
 		if (title.equalsIgnoreCase("login")) {
 			
-			wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+			//wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+			Thread.sleep(10000);
 			
 			if (title=="Error") {
 				locateElement("xpath", "//button[text()='Back']").click();
+				Thread.sleep(4000);
 				
 				String mainPage = driver.getTitle();
 				
+				try {
+				
 				if (mainPage.equalsIgnoreCase("Login")) {
 					LoginPage lp = new LoginPage();
-					lp.userName().password().clickLogin();
+					lp.userName().password().clickLogin().webPageTitle();
 				
+				}
+				
+				}catch (Exception e) 
+				{
+					System.err.print(e);
 				}
 			}
 			
@@ -37,9 +46,9 @@ public class HomePage extends BaseClass {
 			
 		
 		
+		String newTitle = driver.getTitle();
 		
-		
-		if (title.equalsIgnoreCase("Home")) {
+		if (newTitle.equalsIgnoreCase("Home")) {
 			
 			wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 			
@@ -61,7 +70,7 @@ public class HomePage extends BaseClass {
 			
 			if (mainPage.equalsIgnoreCase("Login")) {
 				LoginPage lp = new LoginPage();
-				lp.userName().password().clickLogin();
+				lp.userName().password().clickLogin().webPageTitle();
 			
 			}
 			else {

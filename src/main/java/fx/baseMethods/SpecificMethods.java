@@ -9,7 +9,7 @@ public class SpecificMethods extends BaseClass {
 	
 	@BeforeMethod
 	public void beforeMethod() {
-		driver = launchBrowser("chrome", "https://fx1staging.idsnext.live/#/login");
+		driver = launchBrowser("chrome", "https://fx1.idsnext.live/#/login");
 			
 	}
 }

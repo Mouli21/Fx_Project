@@ -108,4 +108,5 @@ public class BaseClass {
 		String title = driver.getTitle();
 
 	}
+	
 }

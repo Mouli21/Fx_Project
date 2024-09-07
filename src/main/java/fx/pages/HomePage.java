@@ -13,7 +13,7 @@ import fx.base.BaseClass;
 
 public class HomePage extends BaseClass {
 	
-	public HomePage webPageTitle() throws InterruptedException {
+	public DashboardToSalesInvoice webPageTitle() throws InterruptedException {
 		
 		String title = driver.getTitle();
 		
@@ -78,7 +78,7 @@ public class HomePage extends BaseClass {
 			}
 			
 		}
-		return null;
+		return new DashboardToSalesInvoice() ;
 		
 
 	}

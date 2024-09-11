@@ -16,7 +16,8 @@ public class LoginTC extends SpecificMethods {
 		 .clickLogin()
 		 .webPageTitle()
 	     .salesInvocieList()
-	     .invoiceCreation();
+	     .invoiceCreation()
+	     .checkDefaultTT();
 
 	}
 

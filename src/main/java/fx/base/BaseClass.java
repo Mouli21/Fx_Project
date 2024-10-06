@@ -1,5 +1,9 @@
 package fx.base;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.time.Duration;
 import java.util.NoSuchElementException;
 
@@ -101,7 +105,6 @@ public class BaseClass {
 			System.err.print(e);
 		}
 
-
 	}
 	
 	public void pageTitle() {
@@ -109,4 +112,34 @@ public class BaseClass {
 
 	}
 	
+	public String dbConnection(String query) {
+	
+		
+		String str = null;
+			
+       try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			System.out.println("Driver connected");
+			
+			String connection = "jdbc:sqlserver://fxfrontoffice.database.windows.net;user=fxfrontofficeadmin;password=sK9c$3^mZ5Ah?HsX;databaseName=Training";
+			Connection connect = DriverManager.getConnection(connection);
+			
+			System.out.println("Databsae is connected");
+			
+			Statement var = connect.createStatement();
+			ResultSet executeQuery = var.executeQuery(query);
+			if(executeQuery.next())
+			{
+			str = executeQuery.getString("TransactionTypeMasterCode");
+			System.out.println(str);
+			}
+			var.close();
+	}
+       catch(Exception e)
+       {
+    	   System.err.println();
+       }
+	return str;
+	
+}
 }

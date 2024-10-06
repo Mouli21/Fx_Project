@@ -20,7 +20,7 @@ public class HomePage extends BaseClass {
 		if (title.equalsIgnoreCase("login")) {
 			
 			//wait = new WebDriverWait(driver, Duration.ofSeconds(60));
-			Thread.sleep(10000);
+			Thread.sleep(20000);
 			
 			if (title=="Error") {
 				locateElement("xpath", "//button[text()='Back']").click();

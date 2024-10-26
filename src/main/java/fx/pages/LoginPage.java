@@ -32,7 +32,7 @@ public LoginPage password() {
 		
 		try {
 			
-			clearAndType(locateElement("xpath", "//input[@type='password']"),"Ids@1001");
+			clearAndType(locateElement("xpath", "//input[@type='password']"),"Wd@yg587");
 			
 		} catch (NoSuchElementException e) {
 			System.err.print(e);

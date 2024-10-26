@@ -119,11 +119,12 @@ public class DashboardToSalesInvoice extends BaseClass {
 			 if(format.equals(transactionDate))
 			 {
 				 System.out.println("Server date & transaction date are same");
+				// dateChange(); // if u need to change the date then use this method
 				 
 			 }
 			 else
 			 {
-				 System.out.println();
+				 System.out.println("Dates are not equal");
 			 }
 				}catch(Exception e)
 				{
@@ -131,107 +132,25 @@ public class DashboardToSalesInvoice extends BaseClass {
 				}
 		
 			}
-		} catch (ElementNotInteractableException e) {
+		} catch (ElementNotInteractableException e)
+		{
 			 throw  e;
 		}
+		
 		return this;
+		
 
 	}
-	
-	/*
-	 * public DashboardToSalesInvoice checkDefaultTT() throws InterruptedException {
-	 * 
-	 * String text = locateElement("Xpath",
-	 * "(//input[@role='combobox'])[2]").getText(); //used to get the transaction
-	 * type text.
-	 * 
-	 * String currentUrl = driver.getCurrentUrl();
-	 * 
-	 * JavascriptExecutor js = (JavascriptExecutor) driver;
-	 * js.executeScript("window.open()") ;
-	 * 
-	 * for (String handles : driver.getWindowHandles()) { if
-	 * (!handles.equals(currentUrl)) { driver.switchTo().window(handles); } else {
-	 * throw new SessionNotCreatedException("Not able to launch" +currentUrl); } }
-	 * driver.get(currentUrl); try { Thread.sleep(2000);
-	 * clearAndType(locateElement("xpath", "//input[@type='text']"),
-	 * "Transaction Type"); Thread.sleep(2000); String TTscreen =
-	 * locateElement("xpath", "//h2").getText(); System.out.println(TTscreen); if
-	 * (TTscreen.contentEquals(TTscreen)) { WebElement element =
-	 * locateElement("Xpath", "//input[@placeholder='Search']"); element.click();
-	 * Thread.sleep(2000); element.sendKeys("Sales"); Thread.sleep(2000); try {
-	 * boolean enabled = locateElement("xpath",
-	 * "(//mat-icon[@role='img'])[2]").isEnabled(); if (enabled=true) {
-	 * locateElement("xpath", "(//mat-icon[@role='img'])[2]").click();
-	 * Thread.sleep(2000); } else { JavascriptExecutor java = (JavascriptExecutor)
-	 * driver; java.executeScript("arguments[0].click()", enabled);
-	 * Thread.sleep(2000); } } catch (ElementClickInterceptedException a) { throw a;
-	 * }
-	 * 
-	 * List<WebElement> findElements =
-	 * driver.findElements(By.xpath("//mat-row[@role='row']")); // WebElement
-	 * locateElement = locateElement("xpath",
-	 * "//mat-cell[@class='mat-cell cdk-column-Code mat-column-Code ng-star-inserted']"
-	 * );
-	 * 
-	 * for (WebElement elem : findElements) { elem.findElement(By.
-	 * xpath("//mat-cell[@class='mat-cell cdk-column-BookType mat-column-BookType ng-star-inserted']"
-	 * )); String bookType = elem.getText(); if (bookType.contains("C")) { Actions
-	 * click = new Actions(driver); click.doubleClick(elem).perform(); } else {
-	 * throw new ElementClickInterceptedException("Not present / Not clicable " +
-	 * bookType ); }
-	 * 
-	 * } }
-	 * 
-	 * }catch (ElementNotInteractableException e) { throw e; } return this;
-	 * 
-	 * }
-	 */
-	
-	
-	/*
-	 * public DashboardToSalesInvoice checkSliderStatus() throws
-	 * InterruptedException { Thread.sleep(4000); String s= locateElement("xpath",
-	 * "(//span[@class='ng-star-inserted'])[2]").getText(); if
-	 * (s.equalsIgnoreCase("yes")) { System.out.println("Slider is active");
-	 * WebElement TTname = locateElement("xpath", "//input[@placeholder='Name']");
-	 * System.out.println(TTname); if (TTtext.equals(TTname)) { Set<String>
-	 * windowHandles = driver.getWindowHandles();
-	 * 
-	 * List<String> handles = new ArrayList <String>(windowHandles);
-	 * 
-	 * driver.switchTo().window(handles.get(0)); } else {
-	 * System.out.println("Not switched to parent window"); }
-	 * 
-	 * } else { System.out.println("Slider is Passive" + s); } return this; }
-	 */
-	 
-	/*public DashboardToSalesInvoice trasactionTypeSelection()
+	public DashboardToSalesInvoice companySelection()
 	{
-		try {
-			Thread.sleep(4000);
-			 WebElement locateElement = locateElement("Xpath", "(//input[@role='combobox'])[2]");
-			 String text = locateElement("Xpath", "(//input[@role='combobox'])[2]").getText();
-			boolean enabled = locateElement("xpath", "//mat-icon[@role='img'][text()='close']").isEnabled();
-			if (enabled = true) {
-				locateElement("xpath", "(//mat-icon[@role='img'][text()='close'])[1]").click();
-				Thread.sleep(2000);
-				//locateElement("Xpath", "(//input[@type='text'])[2]").click();
-				locateElement("xpath", "(//mat-icon[@role='img'][text()='close'])[1]").click();
-				
-				//using select class to fetch the TT data
-				Select sel = new Select(locateElement);
-				sel.selectByValue(text);
-				
-			}else {
-				throw new RuntimeException("Error - Else block is executed. TransactionType is not clicked");
-			}
-			
-		} catch (Exception e) 
-		{
-			System.err.println("Error occured :" + e.getMessage());
-		}
-        return null;
-	}*/
-
+		locateElement("xpath", "//input[@placeholder='Company']").click();
+		
+		List<WebElement> findElements = driver.findElements(By.xpath("//div[@role='listbox']//mat-option"));
+		
+		
+		
+		
+       return this;
+	}
+	
 }

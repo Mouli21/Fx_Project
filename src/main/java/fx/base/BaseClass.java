@@ -25,6 +25,7 @@ public class BaseClass {
 	
 	public static RemoteWebDriver driver;
 	public WebDriverWait wait;
+	private String lowerCase;
 	
 	
  	public RemoteWebDriver launchBrowser(String browser, String url) {
@@ -114,7 +115,6 @@ public class BaseClass {
 	
 	public String dbConnection(String query) {
 	
-		
 		String str = null;
 			
        try {
@@ -142,4 +142,44 @@ public class BaseClass {
 	return str;
 	
 }
+	public void dateChange()
+	{
+		locateElement("xpath", "(//button[@aria-label='Open calendar'])").click();
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20)); //waiting for 10 seconds
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='mat-calendar-content']"))); //waiting explicitly
+		
+	  String currentYrMonth =	locateElement("Xpath", "//button[@aria-label='Choose month and year']//span").getText().toLowerCase(); //retrieve month & year
+	  
+	  WebElement nextMonth = locateElement("XPAth", "//button[@aria-label='Next month']");
+	  
+	  WebElement prevMonth = locateElement("XPAth", "//button[@aria-label='Previous month']");
+	  
+	 
+	  
+	  try {
+		  if (!nextMonth.isEnabled()) 
+		  {
+			if (prevMonth.isEnabled())
+			{
+				while(!currentYrMonth.toLowerCase().equalsIgnoreCase("Apr 2024"))
+				{
+					prevMonth.click();
+					currentYrMonth =locateElement("Xpath", "//button[@aria-label='Choose month and year']//span").getText();
+				}
+				locateElement("xpath", "(//tr[@role='row'])[4] //td[@aria-label='26 April 2024']").click();
+			}
+		  }
+		  else {
+			System.out.println("Next month is enabled for the curreent month & year");
+		}
+	  }
+	  catch (Exception e) 
+	  {
+		System.err.print(e);
+	}
+		
+		
+		
+
+	}
 }

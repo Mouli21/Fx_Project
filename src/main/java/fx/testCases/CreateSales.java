@@ -1,5 +1,7 @@
 package fx.testCases;
 
+import java.text.ParseException;
+
 import org.testng.annotations.Test;
 
 import fx.pages.DashboardToSalesInvoice;
@@ -7,10 +9,10 @@ import fx.pages.DashboardToSalesInvoice;
 public class CreateSales {
 	
 	@Test
-	public void salesInvoiceCreation() throws InterruptedException
+	public void salesInvoiceCreation() throws InterruptedException, ParseException
 	{
 		new DashboardToSalesInvoice()
-		.salesInvocieList().invoiceCreation();//.checkDefaultTT().checkSliderStatus();
+		.salesInvocieList().invoiceCreation().companySelection().invoiceDateCheck();;
 
 	}
 

@@ -1,13 +1,15 @@
 package fx.pages;
 
-import java.sql.Date;
+//import java.sql.Date;
 import java.sql.ResultSet;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -28,6 +30,14 @@ import fx.base.BaseClass;
 public class DashboardToSalesInvoice extends BaseClass {
 	
 	private String TTtext;
+	
+	private String transactionDate;
+	
+	private  String invoiceDate;
+	
+//	private int invoDate;
+//	
+//	private int transaDate;
 	
 	public DashboardToSalesInvoice salesInvocieList() throws InterruptedException {
 		
@@ -72,7 +82,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 				
 				List<WebElement> var = driver.findElements(By.xpath("//span[@class='mat-option-text']"));
 				
-     		String db =  dbConnection("Select TransactionTypeMasterCode from FXFAS_TransactionTypeMaster where BookType='C' and IsDeleted=0 and IsDefault=1");
+     		String db =  dbConnection("Select * from FXFAS_TransactionTypeMaster where BookType='C' and IsDeleted=0 and IsDefault=1"+"and PmsCustCode="+pmscustcode,"TransactionTypeMasterCode");
 				
 				for(WebElement ref : var)
 				{
@@ -102,8 +112,13 @@ public class DashboardToSalesInvoice extends BaseClass {
 					
 				  WebElement transDate = locateElement("xpath", "//input[@placeholder='Transaction Date']");
 				  transDate.click();
-				  String transactionDate = transDate.getAttribute("max");
+				  transactionDate = transDate.getAttribute("max");
+				  
+			//	  int transaDate = Integer.parseInt(transactionDate);
 			  //   String transactionDate	=  transDate.getText();
+				
+				//trnDateComparision = (Date) dateComparision(transactionDate);
+				  
 				
 				LocalDate serverDate = LocalDate.now();
 				
@@ -114,6 +129,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 				  
 				  String format = serverDate.format(date);
 				 
+	
 				
 			 
 			 if(format.equals(transactionDate))
@@ -147,10 +163,51 @@ public class DashboardToSalesInvoice extends BaseClass {
 		
 		List<WebElement> findElements = driver.findElements(By.xpath("//div[@role='listbox']//mat-option"));
 		
+		String taxCompany = dbConnection("Select * from Company where isdeleted=0 and [status]=1 and isgstapplicable=1"+"and pmscustcode="+pmscustcode, "CompanyCode");
 		
 		
+		for (WebElement company : findElements) 
+		{
+			String text = company.getText();
+			
+			if (text.contains(taxCompany)) 
+			{
+				click(company);
+				break;
+			}
+		}
 		
        return this;
+	}
+	
+	public DashboardToSalesInvoice invoiceDateCheck() throws ParseException 
+	{
+		try {
+			
+			  WebElement invDate = locateElement("xpath", "//input[@placeholder='Invoice Date']");
+			  invDate.click();
+		      invoiceDate = invDate.getAttribute("max");
+			
+			System.out.println(invoiceDate);
+			
+		//	int invoDate = Integer.parseInt(invoiceDate);
+			  
+			 //  invDateComparision = (Date) dateComparision(invoiceDate);
+			  
+		}catch(Exception e)
+		{
+			System.err.println();
+		}
+		
+		
+		if (invoiceDate.equals(transactionDate))
+		{
+			System.out.println("Invoice date is :"+ invoiceDate +" and Transaction date is :"+ transactionDate);
+			
+		}
+	
+			return this;  
+
 	}
 	
 }

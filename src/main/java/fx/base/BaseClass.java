@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Date;
 import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
@@ -26,6 +29,7 @@ public class BaseClass {
 	public static RemoteWebDriver driver;
 	public WebDriverWait wait;
 	private String lowerCase;
+	public String pmscustcode = "30002";
 	
 	
  	public RemoteWebDriver launchBrowser(String browser, String url) {
@@ -113,7 +117,7 @@ public class BaseClass {
 
 	}
 	
-	public String dbConnection(String query) {
+	public String dbConnection(String query, String columnName) {
 	
 		String str = null;
 			
@@ -130,7 +134,7 @@ public class BaseClass {
 			ResultSet executeQuery = var.executeQuery(query);
 			if(executeQuery.next())
 			{
-			str = executeQuery.getString("TransactionTypeMasterCode");
+			str = executeQuery.getString(columnName);
 			System.out.println(str);
 			}
 			var.close();
@@ -170,7 +174,7 @@ public class BaseClass {
 			}
 		  }
 		  else {
-			System.out.println("Next month is enabled for the curreent month & year");
+			System.out.println("Next month is enabled for the current month & year");
 		}
 	  }
 	  catch (Exception e) 
@@ -180,6 +184,18 @@ public class BaseClass {
 		
 		
 		
+
+	}
+	
+	public Date dateComparision(String date1) throws ParseException 
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date d1 = sdf.parse(date1);
+		
+		//Date d2 = sdf.parse(date2);
+		
+		return d1;
 
 	}
 }

@@ -216,7 +216,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 			WebElement currency = locateElement("Xpath", "//input[@formcontrolname='Currency']");
 			currency.getText();
 			
-			WebElement currencyClear = locateElement("xpath", "(//button[@aria-label='Clear'])[2]");
+			WebElement currencyClear = locateElement("xpath", "(//button[@aria-label='Clear'])[3]");
 			currencyClear.click();
 			Thread.sleep(2000);
 			
@@ -232,7 +232,8 @@ public class DashboardToSalesInvoice extends BaseClass {
 				
 			for(WebElement curren: currencies)
 			{
-				if(curren.getText().equalsIgnoreCase(currencyDefault))
+				//System.out.println(curren.getText());
+				if(curren.getText().contains(currencyDefault))
 				{
 					curren.click();
 				

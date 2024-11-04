@@ -210,4 +210,43 @@ public class DashboardToSalesInvoice extends BaseClass {
 
 	}
 	
+		public DashboardToSalesInvoice currencySelection() throws InterruptedException 
+		{
+			
+			WebElement currency = locateElement("Xpath", "//input[@formcontrolname='Currency']");
+			currency.getText();
+			
+			WebElement currencyClear = locateElement("xpath", "(//button[@aria-label='Clear'])[2]");
+			currencyClear.click();
+			Thread.sleep(2000);
+			
+			WebElement currencyDropDown = locateElement("xpath", "(//div[@class='mat-form-field-flex']//mat-icon)[4]");
+			currencyDropDown.click();
+			
+			List<WebElement> currencies = driver.findElements(By.xpath("//span[@class='mat-option-text']"));
+			
+			try {
+				
+				String currencyDefault = dbConnection("Select * from Currency where Isdeleted=0 and IsDefault=1 and PmsCustCode="+pmscustcode, "CurrencyName");
+					
+				
+			for(WebElement curren: currencies)
+			{
+				if(curren.getText().equalsIgnoreCase(currencyDefault))
+				{
+					curren.click();
+				
+				}
+			}
+			
+			}
+			catch(Exception x)
+			{
+				System.err.println();
+				System.out.println(x);
+			}
+
+			return this;
+		}
+	
 }

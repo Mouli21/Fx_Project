@@ -198,4 +198,9 @@ public class BaseClass {
 		return d1;
 
 	}
+	
+	public void mandatoryFields() {
+		locateElement("XPATH", "//span[@class='mat-form-field-label-wrapper']//label//span");
+
+	}
 }

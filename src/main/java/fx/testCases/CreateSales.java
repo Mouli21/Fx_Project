@@ -12,7 +12,7 @@ public class CreateSales {
 	public void salesInvoiceCreation() throws InterruptedException, ParseException
 	{
 		new DashboardToSalesInvoice()
-		.salesInvocieList().invoiceCreation().companySelection().invoiceDateCheck().currencySelection();
+		.salesInvocieList().invoiceCreation().companySelection().invoiceDateCheck().currencySelection().placeOfSupply().termsAndDueDate();
 
 	}
 

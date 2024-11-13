@@ -35,6 +35,12 @@ public class DashboardToSalesInvoice extends BaseClass {
 	
 	private  String invoiceDate;
 	
+	private  String hotelState;
+	
+	private String attributeplaceOfSupply;
+	
+	
+	
 //	private int invoDate;
 //	
 //	private int transaDate;
@@ -249,5 +255,78 @@ public class DashboardToSalesInvoice extends BaseClass {
 
 			return this;
 		}
+		
+		public DashboardToSalesInvoice placeOfSupply() throws InterruptedException 
+		{
+			WebElement placeOfSupply = locateElement("xpath", "//input[@placeholder='Place of supply']");
+			
+			
+			if (placeOfSupply.isEnabled())
+			{
+				placeOfSupply.click();
+			  attributeplaceOfSupply = placeOfSupply.getAttribute("placeholder");
+				
+			}
+//			JavascriptExecutor exe = (JavascriptExecutor)driver;
+//			String place = (String) exe.executeScript("return document.getelementbyXpath('//input[@placeholder='Place of supply']').");
+			
+			
+		 hotelState =	dbConnection("Select * from HotelInfo where isDeleted=0 and PmsCustCode="+pmscustcode, "StateCode");
+		 
+		 if (attributeplaceOfSupply.equalsIgnoreCase(hotelState))
+		 {
+			System.out.println("Property state & Sales invoice state are same..!");
+		 } else
+		 {
+			  locateElement("Xpath", "(//button[@aria-label='Clear'])[3]").click();
+			  
+			   locateElement("XPATH", "(//div[@class='mat-form-field-flex']//mat-icon)[5]").click();
+			   
+			   Thread.sleep(2000);
+			   
+			   try {
+			   
+			List<WebElement> placeOfSupplyDropDown =   driver.findElements(By.xpath("//div[@role='listbox']//div"));
+			
+			for (WebElement dd : placeOfSupplyDropDown) 
+			{
+				if (dd.getText().equalsIgnoreCase(attributeplaceOfSupply)) 
+				{
+					dd.click();
+				}
+				
+			}
+			 
+			   }catch(Exception exc)
+			   {
+				   System.out.println("Inside place of Supply catch block"+ exc);
+			   }
+			 
+		 }
+			return this;
+
+		}
 	
+		public DashboardToSalesInvoice termsAndDueDate() throws InterruptedException
+		{
+			locateElement("XPATH", "//input[@placeholder='Terms']").click();
+			
+			Thread.sleep(2000);
+			
+			locateElement("Xpath", "((//div[@role='listbox'])//div)[2]").click();
+			
+			//dueDateField
+			WebElement dueDateField = locateElement("Xpath", "//input[@placeholder='Due Date']");
+			
+			
+			String date = dueDateField.getText();
+			
+			System.out.println("Due date is "+ date);
+			
+		//	List<WebElement> termsDropDown =   driver.findElements(By.xpath("//div[@role='listbox']//div"));
+			
+			
+
+			return this;
+		}
 }

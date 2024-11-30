@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Set;
 
 import javax.management.RuntimeErrorException;
@@ -37,7 +38,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 	
 	private  String hotelState;
 	
-	private String attributeplaceOfSupply;
+	
 	
 	
 	
@@ -258,13 +259,13 @@ public class DashboardToSalesInvoice extends BaseClass {
 		
 		public DashboardToSalesInvoice placeOfSupply() throws InterruptedException 
 		{
-			WebElement placeOfSupply = locateElement("xpath", "//input[@placeholder='Place of supply']");
+			WebElement placeOfSupply = locateElement("xpath", "(//button[@aria-label='Clear'])[4]");
 			
 			
 			if (placeOfSupply.isEnabled())
 			{
 				placeOfSupply.click();
-			  attributeplaceOfSupply = placeOfSupply.getAttribute("placeholder");
+			//  attributeplaceOfSupply = placeOfSupply.getAttribute("placeholder");
 				
 			}
 //			JavascriptExecutor exe = (JavascriptExecutor)driver;
@@ -273,12 +274,16 @@ public class DashboardToSalesInvoice extends BaseClass {
 			
 		 hotelState =	dbConnection("Select * from HotelInfo where isDeleted=0 and PmsCustCode="+pmscustcode, "StateCode");
 		 
-		 if (attributeplaceOfSupply.equalsIgnoreCase(hotelState))
+		 
+//		 
+//		 if (placeOfSupply.getText().equalsIgnoreCase(hotelState))
+//		 {
+//			System.out.println("Property state & Sales invoice state are same..!");
+//			placeOfSupply.click();
+//		 } else
+		 try
 		 {
-			System.out.println("Property state & Sales invoice state are same..!");
-		 } else
-		 {
-			  locateElement("Xpath", "(//button[@aria-label='Clear'])[3]").click();
+			  locateElement("Xpath", "(//button[@aria-label='Clear'])[4]").click();
 			  
 			   locateElement("XPATH", "(//div[@class='mat-form-field-flex']//mat-icon)[5]").click();
 			   
@@ -286,47 +291,145 @@ public class DashboardToSalesInvoice extends BaseClass {
 			   
 			   try {
 			   
-			List<WebElement> placeOfSupplyDropDown =   driver.findElements(By.xpath("//div[@role='listbox']//div"));
+			List<WebElement> placeOfSupplyDropDown =   driver.findElements(By.xpath("//div[@role='listbox']//span"));
 			
 			for (WebElement dd : placeOfSupplyDropDown) 
 			{
-				if (dd.getText().equalsIgnoreCase(attributeplaceOfSupply)) 
+				String place = dd.getText();
+			//	System.out.println(place);
+				
+				if (place.contains(hotelState)) 
 				{
-					dd.click();
+					click(dd);
 				}
 				
 			}
-			 
 			   }catch(Exception exc)
 			   {
 				   System.out.println("Inside place of Supply catch block"+ exc);
 			   }
 			 
 		 }
+		 catch(Exception e)
+		 {
+			 System.err.print(e);
+		 }
 			return this;
 
 		}
 	
-		public DashboardToSalesInvoice termsAndDueDate() throws InterruptedException
+		public DashboardToSalesInvoice termsField() throws InterruptedException
 		{
-			locateElement("XPATH", "//input[@placeholder='Terms']").click();
+			locateElement("XPATH", "(//div[@class='mat-form-field-flex']//mat-icon)[6]").click();
 			
 			Thread.sleep(2000);
 			
-			locateElement("Xpath", "((//div[@role='listbox'])//div)[2]").click();
-			
-			//dueDateField
-			WebElement dueDateField = locateElement("Xpath", "//input[@placeholder='Due Date']");
-			
-			
-			String date = dueDateField.getText();
-			
-			System.out.println("Due date is "+ date);
-			
-		//	List<WebElement> termsDropDown =   driver.findElements(By.xpath("//div[@role='listbox']//div"));
+			locateElement("Xpath", "((//div[@role='listbox'])//span)[3]").click();
 			
 			
 
 			return this;
 		}
+		
+		public DashboardToSalesInvoice taxTypeField() 
+		{
+			locateElement("XPATH", "//div[@class='mat-select-trigger']").click();
+			
+			locateElement("Xpath", "//mat-option[@role='option']//span").click();//Inclusive Tax if want exclusive then add index value.
+			
+			scrollWebPage(550, 0);
+			
+			return this;
+
+		}
+		
+		public DashboardToSalesInvoice revenueSelection() throws InterruptedException
+		{
+			scrollWebPage(550, 0);
+			
+			
+		locateElement("Xpath", "(//mat-icon[@role='img'][@style='color:#ff8e00'][text()='search'])[2]").click();
+			
+		List<WebElement> revenue=	driver.findElements(By.xpath("//mat-option[@role='option']//span"));
+		
+		String revenueCode = dbConnection("Select top 1 * from RevenueCode where PmsCustcode="+pmscustcode+" and IsDeleted=0 and Module='FrontOffice' ", "RevenueCodeName");
+		
+		for(WebElement rev : revenue)
+		{
+			
+			String listRevenue = rev.getText();
+			System.out.println(listRevenue);
+			//Thread.sleep(2000)
+			if (listRevenue.startsWith(revenueCode)) 
+			{
+				click(rev);
+			}
+			
+		}
+		return this;
+
+		}
+		
+		public DashboardToSalesInvoice costCenterSelection() 
+		{
+			WebElement cc =  locateElement("Xpath", "//div[@class='mat-form-field-infix']//input[@placeholder='CostCenter']");
+			cc.click();
+			String ccText = cc.getText();
+			
+			System.out.println("CurrentCostCenter is " + ccText);
+			
+			if(ccText!=""||ccText!=" ")
+			{
+				WebElement dept =  locateElement("Xpath", "//div[@class='mat-form-field-infix']//input[@placeholder='Department']");
+				System.out.println(dept.getText());
+				
+				System.out.println("Seciton & department are tagged..!");
+			}
+			else
+			{
+			
+				locateElement("Xpath", "//div[@class='mat-form-field-suffix ng-tns-c2-99 ng-star-inserted']//mat-icon[@role='img'])").click();
+			//	List<WebElement> ccDropdown = driver.findElements(By.xpath("//span[@class='mat-option-text']"));
+				locateElement("XPATH", "//span[@class='mat-option-text']").click();
+				
+			}
+			return this;
+
+		}
+		
+		public DashboardToSalesInvoice gstTaxRateType() 
+		{
+			String gstRateType = locateElement("Xpath", "//div[@class='mat-form-field-infix']//span[@class='ng-tns-c15-102 ng-star-inserted']").getText();
+			
+			if (gstRateType.equalsIgnoreCase("SAC")) 
+			{
+				System.out.println("GST rate type is :"+ gstRateType);
+			}
+			else
+			{
+				//throw new RuntimeException("For sales invoice GST rate type is :"+gstRateType );
+				System.out.println("GST rate type is :"+ gstRateType);
+			}
+			
+			return this;
+
+		}
+		
+		 public DashboardToSalesInvoice	hsnsacField()
+		{
+			WebElement hsnfield = locateElement("Xpath", "//input[@placeholder='HSN/SAC']");
+			
+			hsnfield.click();
+			
+			Random random = new Random();
+			
+			int  randomNumber= 100 + random.nextInt(500);
+			
+			String value = String.valueOf(randomNumber);
+			
+			clearAndType(hsnfield, value);
+			
+			return this;
+		}
+		
 }

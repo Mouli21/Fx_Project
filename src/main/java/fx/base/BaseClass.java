@@ -17,6 +17,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -96,7 +97,7 @@ public class BaseClass {
 		}
 		
 	}
-	public void click(WebElement element) {
+	public WebElement click(WebElement element) {
 
 		
 		try {
@@ -109,6 +110,7 @@ public class BaseClass {
 			
 			System.err.print(e);
 		}
+		return element;
 
 	}
 	
@@ -201,6 +203,14 @@ public class BaseClass {
 	
 	public void mandatoryFields() {
 		locateElement("XPATH", "//span[@class='mat-form-field-label-wrapper']//label//span");
+
+	}
+	
+	public void scrollWebPage(int x, int y) 
+	{
+		Actions action = new Actions(driver);
+		action.scrollByAmount(x, y).build().perform();
+		
 
 	}
 }

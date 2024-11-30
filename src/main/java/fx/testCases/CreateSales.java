@@ -12,7 +12,8 @@ public class CreateSales {
 	public void salesInvoiceCreation() throws InterruptedException, ParseException
 	{
 		new DashboardToSalesInvoice()
-		.salesInvocieList().invoiceCreation().companySelection().invoiceDateCheck().currencySelection().placeOfSupply().termsAndDueDate();
+		.salesInvocieList().invoiceCreation().companySelection().invoiceDateCheck().currencySelection().placeOfSupply().termsField()
+		.revenueSelection().costCenterSelection().gstTaxRateType().hsnsacField();
 
 	}
 

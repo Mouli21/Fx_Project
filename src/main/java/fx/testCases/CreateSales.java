@@ -13,7 +13,7 @@ public class CreateSales {
 	{
 		new DashboardToSalesInvoice()
 		.salesInvocieList().invoiceCreation().companySelection().invoiceDateCheck().currencySelection().placeOfSupply().termsField()
-		.revenueSelection().costCenterSelection().gstTaxRateType().hsnsacField();
+		.revenueSelection().costCenterSelection().gstTaxRateType().hsnsacField().findUOM().enterRate();
 
 	}
 

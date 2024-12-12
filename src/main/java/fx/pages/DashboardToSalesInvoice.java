@@ -22,6 +22,7 @@ import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SessionNotCreatedException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
@@ -37,6 +38,8 @@ public class DashboardToSalesInvoice extends BaseClass {
 	private  String invoiceDate;
 	
 	private  String hotelState;
+	
+	public String decimalValue;
 	
 	
 	
@@ -352,17 +355,18 @@ public class DashboardToSalesInvoice extends BaseClass {
 			
 		List<WebElement> revenue=	driver.findElements(By.xpath("//mat-option[@role='option']//span"));
 		
-		String revenueCode = dbConnection("Select top 1 * from RevenueCode where PmsCustcode="+pmscustcode+" and IsDeleted=0 and Module='FrontOffice' ", "RevenueCodeName");
+		String revenueCode = dbConnection("Select top 1 * from FXFAS_InterfaceLink where PmsCustcode="+pmscustcode+" and IsDeleted=0 and Module='FrontOffice' and DebitAccount<>'' and CreditAccount<>'' and CategoryType='Revenue' ", "RevenueName");// interfacelink tbl
 		
 		for(WebElement rev : revenue)
 		{
 			
 			String listRevenue = rev.getText();
-			System.out.println(listRevenue);
+		//	System.out.println(listRevenue);
 			//Thread.sleep(2000)
 			if (listRevenue.startsWith(revenueCode)) 
 			{
 				click(rev);
+				break;
 			}
 			
 		}
@@ -378,28 +382,31 @@ public class DashboardToSalesInvoice extends BaseClass {
 			
 			System.out.println("CurrentCostCenter is " + ccText);
 			
-			if(ccText!=""||ccText!=" ")
+			if(ccText==""||ccText==" ")
+			{
+				
+				locateElement("Xpath", "(//mat-icon[@class='mat-icon material-icons mat-icon-no-color ng-star-inserted'])[4]").click();
+				locateElement("XPATH", "//span[@class='mat-option-text']").click();
+				
+				
+			}
+			else
 			{
 				WebElement dept =  locateElement("Xpath", "//div[@class='mat-form-field-infix']//input[@placeholder='Department']");
 				System.out.println(dept.getText());
 				
 				System.out.println("Seciton & department are tagged..!");
-			}
-			else
-			{
-			
-				locateElement("Xpath", "//div[@class='mat-form-field-suffix ng-tns-c2-99 ng-star-inserted']//mat-icon[@role='img'])").click();
-			//	List<WebElement> ccDropdown = driver.findElements(By.xpath("//span[@class='mat-option-text']"));
-				locateElement("XPATH", "//span[@class='mat-option-text']").click();
+
 				
 			}
 			return this;
 
 		}
 		
-		public DashboardToSalesInvoice gstTaxRateType() 
+		public DashboardToSalesInvoice gstTaxRateType() throws InterruptedException 
 		{
-			String gstRateType = locateElement("Xpath", "//div[@class='mat-form-field-infix']//span[@class='ng-tns-c15-102 ng-star-inserted']").getText();
+			Thread.sleep(3000);
+			String gstRateType = locateElement("Xpath", "//mat-select[@aria-label='GST Rate Type']").getText();
 			
 			if (gstRateType.equalsIgnoreCase("SAC")) 
 			{
@@ -408,7 +415,9 @@ public class DashboardToSalesInvoice extends BaseClass {
 			else
 			{
 				//throw new RuntimeException("For sales invoice GST rate type is :"+gstRateType );
-				System.out.println("GST rate type is :"+ gstRateType);
+				System.out.println("GST rate type in else block is :"+ gstRateType);
+				locateElement("xpath", "(//div[@class='mat-select-value'])[2])").click();
+				locateElement("Xpath", "(//div[@class='mat-form-field-infix']//span[@ng-reflect-ng-switch='false']//span)[2]").click();
 			}
 			
 			return this;
@@ -421,15 +430,83 @@ public class DashboardToSalesInvoice extends BaseClass {
 			
 			hsnfield.click();
 			
-			Random random = new Random();
+			String sacValue = hsnfield.getText();
 			
-			int  randomNumber= 100 + random.nextInt(500);
+			System.out.println("sacValue is : "+ sacValue);
 			
-			String value = String.valueOf(randomNumber);
+			if(sacValue=="" ||sacValue==" ")
+			{
+				Random random = new Random();
+				
+				int  randomNumber= 100 + random.nextInt(500);
+				
+				String value = String.valueOf(randomNumber);
+				
+				clearAndType(hsnfield, value);
+			}
 			
-			clearAndType(hsnfield, value);
+
 			
 			return this;
 		}
+		 
+		 public DashboardToSalesInvoice findUOM() {
+			 
+			 WebElement UOM = locateElement("Xpath", "//div[@class='mat-form-field-infix']//input[@placeholder='UOM']");
+			 
+			 UOM.click();
+			 
+		//	System.out.println( UOM.getText());
+			 
+		//	if( UOM.getText()=="" ||UOM.getText()==" " )
+			//{
+			
+		      List<WebElement> uomList = driver.findElements(By.xpath("(//div[@class='cdk-overlay-pane mat-autocomplete-panel-above'])//mat-option//span")); //(//div[@class='cdk-overlay-pane'])[2]//mat-option//span[text()=' NOS - NUMBERS ']
+		      
+		      for (WebElement list : uomList) 
+		      {
+		    	String listText =   list.getText();
+		    	
+		   // 	System.out.println("UOM list are : "+ listText);
+		    	
+		    	if (listText.contains(" NOS") || listText.contains("NOS")) 
+		    	{
+					list.click();
+					break;
+				}
+				
+		    	}
+		       
+			//} 
+			 
+			return this;
+
+		}
+		 
+	public DashboardToSalesInvoice enterRate() 
+	{
+		WebElement rate = locateElement("Xpath", "//input[@placeholder='Rate']");
+		
+		rate.click();
+		
+		Random number = new Random();
+		
+	 double decimal =number.nextDouble(2000);
+	 
+	double decimalRoundOffValue = Math.round(decimal * 100.0) /100.0;
+	 
+	  decimalValue = String.valueOf(decimalRoundOffValue);
+	  
+	  
+	
+	 rate.sendKeys(decimalValue);
+	 
+	 WebElement scrollEle = locateElement("xpath", "//h5[text()='Debit ']");
+	 
+		Actions action = new Actions(driver);
+		action.moveToElement(scrollEle).build().perform();
+
+		return this;
+	}	 
 		
 }

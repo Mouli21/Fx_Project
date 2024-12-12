@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.ElementNotInteractableException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -134,7 +135,7 @@ public class BaseClass {
 			
 			Statement var = connect.createStatement();
 			ResultSet executeQuery = var.executeQuery(query);
-			if(executeQuery.next())
+			if(executeQuery.next()) 
 			{
 			str = executeQuery.getString(columnName);
 			System.out.println(str);

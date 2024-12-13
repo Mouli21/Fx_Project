@@ -41,6 +41,8 @@ public class DashboardToSalesInvoice extends BaseClass {
 	
 	public String decimalValue;
 	
+	public static String revenueCode;
+	
 	
 	
 	
@@ -355,7 +357,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 			
 		List<WebElement> revenue=	driver.findElements(By.xpath("//mat-option[@role='option']//span"));
 		
-		String revenueCode = dbConnection("Select top 1 * from FXFAS_InterfaceLink where PmsCustcode="+pmscustcode+" and IsDeleted=0 and Module='FrontOffice' and DebitAccount<>'' and CreditAccount<>'' and CategoryType='Revenue' ", "RevenueName");// interfacelink tbl
+		revenueCode = dbConnection("Select top 1 * from FXFAS_InterfaceLink where PmsCustcode="+pmscustcode+" and IsDeleted=0 and Module='FrontOffice' and DebitAccount<>'' and CreditAccount<>'' and CategoryType='Revenue' ", "RevenueName");// interfacelink tbl
 		
 		for(WebElement rev : revenue)
 		{
@@ -507,6 +509,92 @@ public class DashboardToSalesInvoice extends BaseClass {
 		action.moveToElement(scrollEle).build().perform();
 
 		return this;
-	}	 
+	}
+	
+	public DashboardToSalesInvoice supplyTypeSelection(String gstSelection)
+	{
+		WebElement supplyType = locateElement("XPATH", "//span[text()='Supply Type']");
+		
+		supplyType.click();
+		
+	List<WebElement> supplyTypeDropDown= driver.findElements(By.xpath("//div[contains(@class,'ng-trigger ng-trigger-transformPanel')]//mat-option//span"));
+	
+	for(WebElement supply :supplyTypeDropDown )
+	{
+		
+	String supplyValue =supply.getText();
+	
+	if (supplyValue.contains(gstSelection))
+	{
+		supply.click();
+		break;
+	}
+		
+	}
+	
+	if (gstSelection.equals("None"))
+	{
+		enterDescription();
+	}
+	else if (gstSelection.equalsIgnoreCase("Exempted")) 
+	{
+		enterDescription();
+	}
+	else if (gstSelection.equalsIgnoreCase("Nil Rated")) 
+	{
+		enterDescription();
+	}
+	else if (gstSelection.equalsIgnoreCase("Regular GST") || gstSelection.equalsIgnoreCase("Non GST") || gstSelection.equalsIgnoreCase("Zero Rated")) 
+	{
+		taxSelection();
+	}
+	
+		
+		return this;
+
+	}
+	
+	public DashboardToSalesInvoice taxSelection() 
+	{
+		
+		
+		locateElement("Xpath", "//input[@placeholder='Tax']").click();
+		
+		List<WebElement> taxType = driver.findElements(By.xpath("//div[@class='mat-autocomplete-panel customClass mat-autocomplete-visible ng-star-inserted']//mat-option//span//span"));
+		
+		for (WebElement taxSelection : taxType) 
+		{
+			String taxStructures = taxSelection.getText();
+			
+			if (taxStructures.contains("GST")) 
+			{
+				taxSelection.click();
+			}
+			else if (taxStructures.contains("IGST")) 
+			{
+				taxSelection.click();
+			}
+		}
+	
+		return this;
+	}
+	
+	public DashboardToSalesInvoice enterDescription() 
+	{
+	   WebElement desc =locateElement("Xpath", "//textarea");
+	   
+	   desc.click();
+	   
+	   desc.sendKeys("Amount of Rs: "+decimalValue+ " was passed against the revenue "+ revenueCode);
+	   
+	   
+	   WebElement debitSide = locateElement("Xpath", "//label[text()='Debit Account']");
+	   
+	   Actions act = new Actions(driver);
+	   act.moveToElement(debitSide).build().perform();
+		
+		return this;
+
+	}
 		
 }

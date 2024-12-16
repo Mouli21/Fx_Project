@@ -18,9 +18,11 @@ import java.util.Set;
 import javax.management.RuntimeErrorException;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -41,9 +43,9 @@ public class DashboardToSalesInvoice extends BaseClass {
 	
 	public String decimalValue;
 	
-	public static String revenueCode;
+	public  String revenueCode;
 	
-	
+	public WebElement creditLedger,debitLedger;
 	
 	
 	
@@ -590,11 +592,80 @@ public class DashboardToSalesInvoice extends BaseClass {
 	   
 	   WebElement debitSide = locateElement("Xpath", "//label[text()='Debit Account']");
 	   
-	   Actions act = new Actions(driver);
-	   act.moveToElement(debitSide).build().perform();
+		Dimension dimen =  debitSide.getSize();
+		
+	//	System.out.println(dimen.getHeight());
+		//System.out.println(dimen.getWidth());
+		  		
+		//Location
+		Point p = debitSide.getLocation();
+		//System.out.println(p.getX());
+		//System.out.println(p.getY());
+	   
+//	   Actions act = new Actions(driver);
+//	   act.moveToElement(debitSide,0,420).build().perform();
 		
 		return this;
 
 	}
+	
+	public  DashboardToSalesInvoice ledgerSelectionCredit() 
+	{
+		 creditLedger = locateElement("Xpath", "(//div[contains(@class,'mat-form-field-suffix ng-tns')]//mat-icon)[11]");
 		
+		String revenueLedger = creditLedger.getText();
+		
+		System.out.println(revenueLedger);
+		
+		if (revenueLedger.equalsIgnoreCase("close"))
+		{
+			
+			debitLedger = locateElement("Xpath", "(//div[contains(@class,'mat-form-field-suffix ng-tns')]//mat-icon)[10]");
+			
+		    String debtorsLedger =debitLedger.getText();
+		 
+		  if (debtorsLedger.equalsIgnoreCase("close"))
+	    	{
+			  WebElement amount=  locateElement("xpath", "//input[@placeholder='Amount']");
+			  String figure = amount.getText();
+			  System.out.println(figure);
+			  
+			  if (figure.equals("")|| figure.equals(" ")) 
+			  {
+				  JavascriptExecutor js = (JavascriptExecutor) driver;
+				  String script = "return arguments[0].value || arguments[0].textContent || arguments[0].innerText;";
+				  String fieldValue = (String) js.executeScript(script, amount);
+				  System.out.println(fieldValue);
+				
+		    	}
+			
+	    	}
+		  else {
+			System.out.println("Not able to fetch the amount");
+		}
+		
+			
+//			List<WebElement> ledgerDropDown = driver.findElements(By.xpath("//div[contains(@class,'mat-autocomplete-panel')]//mat-option//span"));
+//			
+//			for (WebElement selectLedger : ledgerDropDown) 
+//			{
+//				selectLedger.click();
+//				break;
+//			}
+		}
+		  else {
+				System.out.println("Not went inside if block itself");
+			}
+//		else
+//		{
+//			JavascriptExecutor js = (JavascriptExecutor)driver;
+//			 String jsvalue= (String) js.executeScript("return arguments[0].innertext", revenueLedger);
+//			 
+//			 System.out.println(jsvalue);
+//		}
+		
+		return this;	
+
+	}
+
 }

@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 import fx.baseMethods.SpecificMethods;
 import fx.pages.LoginPage;
 
-public class LoginTC extends SpecificMethods {
+public class Login_TC extends SpecificMethods {
 	
 	@Test
 	public void loginFx() throws InterruptedException {

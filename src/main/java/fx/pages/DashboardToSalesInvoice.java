@@ -28,6 +28,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 
 import fx.base.BaseClass;
 
@@ -46,6 +47,8 @@ public class DashboardToSalesInvoice extends BaseClass {
 	public  String revenueCode;
 	
 	public WebElement creditLedger,debitLedger;
+	
+	private String transactionAmount,debitAmount,creditAmount;
 	
 	
 	
@@ -354,12 +357,14 @@ public class DashboardToSalesInvoice extends BaseClass {
 		{
 			scrollWebPage(550, 0);
 			
+			Random num = new Random();
+			int revSelectionNumber = num.nextInt(10);
 			
 		locateElement("Xpath", "(//mat-icon[@role='img'][@style='color:#ff8e00'][text()='search'])[2]").click();
 			
 		List<WebElement> revenue=	driver.findElements(By.xpath("//mat-option[@role='option']//span"));
 		
-		revenueCode = dbConnection("Select top 1 * from FXFAS_InterfaceLink where PmsCustcode="+pmscustcode+" and IsDeleted=0 and Module='FrontOffice' and DebitAccount<>'' and CreditAccount<>'' and CategoryType='Revenue' ", "RevenueName");// interfacelink tbl
+		revenueCode = dbConnection("Select top "+ revSelectionNumber+" * from FXFAS_InterfaceLink where PmsCustcode="+pmscustcode+" and IsDeleted=0 and Module='FrontOffice' and DebitAccount<>'' and CreditAccount<>'' and CategoryType='Revenue' ", "RevenueName");// interfacelink tbl
 		
 		for(WebElement rev : revenue)
 		{
@@ -627,15 +632,15 @@ public class DashboardToSalesInvoice extends BaseClass {
 		  if (debtorsLedger.equalsIgnoreCase("close"))
 	    	{
 			  WebElement amount=  locateElement("xpath", "//input[@placeholder='Amount']");
-			  String figure = amount.getText();
-			  System.out.println(figure);
+			 String fieldValue = amount.getText();
+			  System.out.println(fieldValue);
 			  
-			  if (figure.equals("")|| figure.equals(" ")) 
+			  if (fieldValue.equals("")|| fieldValue.equals(" ")) 
 			  {
 				  JavascriptExecutor js = (JavascriptExecutor) driver;
 				  String script = "return arguments[0].value || arguments[0].textContent || arguments[0].innerText;";
-				  String fieldValue = (String) js.executeScript(script, amount);
-				  System.out.println(fieldValue);
+				  transactionAmount = (String) js.executeScript(script, amount);
+				  System.out.println(transactionAmount);
 				
 		    	}
 			
@@ -665,6 +670,105 @@ public class DashboardToSalesInvoice extends BaseClass {
 //		}
 		
 		return this;	
+
+	}
+	
+	public  DashboardToSalesInvoice validateAmount() 
+	{
+		
+		WebElement debAmt = locateElement("xpath", "(//input[@placeholder='Amount'])[2]");
+		WebElement credAmt = locateElement("xpath", "(//input[@placeholder='Amount'])[2]");
+		
+		try {
+			
+			String debit = debAmt.getText();
+			
+			if (debit.equals("")|| debit.equals(" "))
+			{
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				String script = "return arguments[0].value || arguments[0].textContent || arguments[0].innerText;";
+				debitAmount =  (String) js.executeScript(script,debAmt);
+			}
+			else
+			{
+				throw new Exception("Not able to fetch Debit Amount");
+			}
+			
+		} catch (Exception e) 
+		{
+			System.err.println();
+		}
+		
+		
+		try {
+			
+			String credit = credAmt.getText();
+			
+			if (credit.equals("")|| credit.equals(" "))
+			{
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				String script = "return arguments[0].value || arguments[0].textContent || arguments[0].innerText;";
+				creditAmount =  (String) js.executeScript(script,credAmt);
+			}
+			else
+			{
+				throw new Exception("Not able to fetch Credit Amount");
+			}
+			
+		} catch (Exception e) 
+		{
+			System.err.println();
+		}
+		
+		
+		if (debitAmount.equals(creditAmount)) 
+		{
+		 System.out.println("Both amount fields are equal");	
+		}
+       else {
+			System.out.println("Amount are not equal");
+		}
+		
+		return this;
+
+	}
+	
+	public DashboardToSalesInvoice invoiceAddButtonYes() throws InterruptedException 
+	{
+		WebElement invAddButon = locateElement("id", "InvAddBtn");
+		
+		if (invAddButon.isEnabled()) 
+		{
+			invAddButon.click();
+			WebElement  addRevYesButtn = locateElement("xpath", "//span[text()='Yes']");
+			addRevYesButtn.click();
+			revenueSelection().costCenterSelection().gstTaxRateType().hsnsacField().findUOM().enterRate().supplyTypeSelection("Regular GST")
+			.enterDescription().ledgerSelectionCredit().validateAmount();
+		}
+		else {
+			System.out.println("Invoice Add Button is not enabled");
+			Assert.assertFalse(false);
+		}
+
+		return this;
+	}
+	
+	public SalesInvSavePage invoiceAddButtonNo() 
+	{
+		WebElement invAddButon = locateElement("id", "InvAddBtn");
+		
+		if (invAddButon.isEnabled()) 
+		{
+			invAddButon.click();
+			WebElement  addRevNoButtn = locateElement("xpath", "//span[text()='No']");
+			addRevNoButtn.click();
+		}
+		else {
+			System.out.println("Invoice Add Button is not enabled");
+			Assert.assertFalse(false);
+		}
+			 
+		 return new SalesInvSavePage();	
 
 	}
 

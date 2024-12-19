@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Suite" verbose="2">
-  <test thread-count="5" name="DemoTest">
+<suite thread-count="3" name="Suite">
+  <test thread-count="3" name="Test" verbose="2">
     <classes>
       <class name="fx.testCases.Login_TC"/>
       <class name="fx.testCases.CreateSales_TC"/>
+       <class name="fx.testCases.SaveSalesInv_TC"/>
     </classes>
-  </test> <!-- DemoTest -->
+  </test> <!-- Test -->
 </suite> <!-- Suite -->

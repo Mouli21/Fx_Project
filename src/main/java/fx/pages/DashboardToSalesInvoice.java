@@ -50,6 +50,10 @@ public class DashboardToSalesInvoice extends BaseClass {
 	
 	private String transactionAmount,debitAmount,creditAmount;
 	
+	public String taxAmount,taxes;
+	
+	public double enteredTax,sumOfTaxes;
+	
 	
 	
 //	private int invoDate;
@@ -567,21 +571,25 @@ public class DashboardToSalesInvoice extends BaseClass {
 		
 		locateElement("Xpath", "//input[@placeholder='Tax']").click();
 		
-		List<WebElement> taxType = driver.findElements(By.xpath("//div[@class='mat-autocomplete-panel customClass mat-autocomplete-visible ng-star-inserted']//mat-option//span//span"));
+		List<WebElement> taxType = driver.findElements(By.xpath("//div[@role='listbox']//mat-option//span//span"));
 		
 		for (WebElement taxSelection : taxType) 
 		{
-			String taxStructures = taxSelection.getText();
+			String taxStructures = taxSelection.getText().trim();
 			
-			if (taxStructures.contains("GST")) 
+			System.out.println(taxStructures.length());
+			
+			if (taxStructures.toLowerCase().contains("gst 18")) 
 			{
 				taxSelection.click();
+				break;
 			}
-			else if (taxStructures.contains("IGST")) 
+			else if (taxStructures.contains("igst ")) 
 			{
 				taxSelection.click();
 			}
 		}
+		enterDescription();
 	
 		return this;
 	}
@@ -673,11 +681,57 @@ public class DashboardToSalesInvoice extends BaseClass {
 
 	}
 	
+	public DashboardToSalesInvoice taxAmountFields()
+	{
+		WebElement taxField = locateElement("Xpath", "//input[@placeholder=' Tax Account']");
+		
+		if(taxField.isEnabled())
+		{
+			List<WebElement> tax = driver.findElements(By.xpath("//input[contains(@placeholder,'Tax Amount')]"));
+			
+			List<Double> taxDouble = new ArrayList<Double>();
+			
+			for(WebElement taxVal :tax)
+			{
+				taxAmount = taxVal.getText();
+				
+				if (taxAmount.equals("")||taxAmount.equals(" "))
+				{
+					JavascriptExecutor js = (JavascriptExecutor)driver;
+					String script = "return arguments[0].value || arguments[0].textContent || arguments[0].innerText;";
+					 taxes = (String) js.executeScript(script, taxAmount);
+					 
+					 try {
+						 
+						 enteredTax = Double.parseDouble(taxes.trim());
+						 
+						 taxDouble.add(enteredTax);
+						 
+						 sumOfTaxes += enteredTax;
+						
+					} catch (Exception e) {
+						System.out.println("taxAmountFields catch block :"+e);
+					}
+				}
+					
+			}
+		}
+		else {
+			System.out.println("Tax fields are not enabled");
+			//validateAmount();
+		}
+		
+		
+		
+		return this;
+		
+	}
+	
 	public  DashboardToSalesInvoice validateAmount() 
 	{
 		
 		WebElement debAmt = locateElement("xpath", "(//input[@placeholder='Amount'])[2]");
-		WebElement credAmt = locateElement("xpath", "(//input[@placeholder='Amount'])[2]");
+		WebElement credAmt = locateElement("xpath", "(//input[@placeholder='Amount'])[3]");
 		
 		try {
 			
@@ -723,11 +777,25 @@ public class DashboardToSalesInvoice extends BaseClass {
 		
 		if (debitAmount.equals(creditAmount)) 
 		{
-		 System.out.println("Both amount fields are equal");	
+		 System.out.println("Both amount fields are equal");
 		}
-       else {
-			System.out.println("Amount are not equal");
+       else if(!debitAmount.equals(creditAmount))
+       {
+    	   
+    	   taxAmountFields();
+    	   
+    	  String overallCredit =  sumOfTaxes+creditAmount;
+    	  
+    	  if (debitAmount.equals(overallCredit)) 
+    	  {
+    		 System.out.println("Overall debit value is  equals with your debit Amount");
+			
+	    	}
+    	  else {
+			System.out.println("Overall Credit value is not equal with your debit Amount... Check the script");
 		}
+    	  	
+	    }
 		
 		return this;
 

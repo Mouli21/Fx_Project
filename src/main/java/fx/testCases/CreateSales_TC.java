@@ -13,7 +13,7 @@ public class CreateSales_TC {
 	{
 		new DashboardToSalesInvoice()
 		.salesInvocieList().invoiceCreation().companySelection().invoiceDateCheck().currencySelection().placeOfSupply().termsField()
-		.revenueSelection().costCenterSelection().gstTaxRateType().hsnsacField().findUOM().enterRate().supplyTypeSelection("None").ledgerSelectionCredit()
+		.revenueSelection().costCenterSelection().gstTaxRateType().hsnsacField().findUOM().enterRate().supplyTypeSelection("Regular GST").ledgerSelectionCredit()
 		.validateAmount()
 		//.invoiceAddButtonYes() //UnComment if need to add more revenue
 		.invoiceAddButtonNo();

@@ -699,7 +699,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 				{
 					JavascriptExecutor js = (JavascriptExecutor)driver;
 					String script = "return arguments[0].value || arguments[0].textContent || arguments[0].innerText;";
-					 taxes = (String) js.executeScript(script, taxAmount);
+					 taxes = (String) js.executeScript(script, taxVal);
 					 
 					 try {
 						 
@@ -781,14 +781,20 @@ public class DashboardToSalesInvoice extends BaseClass {
 		}
        else if(!debitAmount.equals(creditAmount))
        {
-    	   
+    	   System.out.println("Inside else if block");
     	   taxAmountFields();
     	   
     	  String overallCredit =  sumOfTaxes+creditAmount;
     	  
-    	  if (debitAmount.equals(overallCredit)) 
+    	  Double creditAmt = Double.parseDouble(creditAmount);
+    	  
+    	 Double overallCreditValue =  sumOfTaxes + creditAmt;
+    	  
+    	 Double debitAmountValue = Double.parseDouble(debitAmount);
+    	  
+    	  if (debitAmountValue.equals(overallCreditValue)) 
     	  {
-    		 System.out.println("Overall debit value is  equals with your debit Amount");
+    		 System.out.println("Overall credit value is  equals with your debit Amount");
 			
 	    	}
     	  else {

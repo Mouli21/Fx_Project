@@ -10,20 +10,22 @@ import org.openqa.selenium.interactions.Actions;
 import fx.base.BaseClass;
 
 
-public class SalesInvSavePage extends BaseClass {
+public class SalesInvSavePage extends DashboardToSalesInvoice {
 	
-	public String amountColumn;
-	public double enteredAmount;
+	public String amountColumn,taxColumn,totalColumn;
+	public double enteredAmount,enteredTax,enteredTotalAmt;
 	public String finalAmt;
-	public double sum=0;
+	public double sum,taxSum,totalSum;
 	
 	public double finalAmtValue;
 	
 	
 	public SalesInvSavePage saveValidation() {
 		
+			
 		List<WebElement> elements = driver.findElements(By.xpath("//mat-cell[@class='mat-cell cdk-column-Amount mat-column-Amount ng-star-inserted']"));
 		
+
 		//WebElement rateColumn = locateElement("class", "mat-cell cdk-column-Amount mat-column-Amount ng-star-inserted");
 		
 		List<Double> amountValue = new ArrayList<Double>(); // as we don't know how many revenues will occur so, list will take care.
@@ -36,7 +38,7 @@ public class SalesInvSavePage extends BaseClass {
 			 {
 					JavascriptExecutor js = (JavascriptExecutor) driver;
 					String script = "return arguments[0].value || arguments[0].textContent || arguments[0].innerText;";
-				    String amt =  (String) js.executeScript(script,amountColumn);
+				    String amt =  (String) js.executeScript(script,amount);
 				    
 				    try {
 						
@@ -82,11 +84,116 @@ public class SalesInvSavePage extends BaseClass {
 			finalAmt = finalAmount.getText();
 			
 		    finalAmtValue =	Double.parseDouble(finalAmt);
+		    
+		   double transactionValue = Double.parseDouble(decimalValue);
+		   
+		   if (transactionValue==finalAmtValue) {
+				   
+				   List<WebElement> element = driver.findElements(By.xpath("//mat-cell[@class='mat-cell cdk-column-Tax mat-column-Tax ng-star-inserted']"));
+				   
+				   List<Double> taxValue = new ArrayList<Double>(); // as we don't know how many revenues will occur so, list will take care.
+					
+					for (WebElement taxAmount : element)
+					{
+						 taxColumn = taxAmount.getText();
+						 
+						 if (taxColumn.equals("")||taxColumn.equals(" "))
+						 {
+								JavascriptExecutor js = (JavascriptExecutor) driver;
+								String script = "return arguments[0].value || arguments[0].textContent || arguments[0].innerText;";
+							    String taxAmt =  (String) js.executeScript(script,taxAmount);
+							    
+							    try {
+									
+							    	enteredTax = Double.parseDouble(taxAmt.trim());
+									
+							    	taxValue.add(enteredTax);
+									
+									taxSum += enteredTax;
+									
+									}
+									catch (NumberFormatException e)
+									{
+										System.out.println("Invalid input inside If Catch Block :" + e);
+									}
+					    }
+						
+				else {
+						try {
+						
+							enteredTax = Double.parseDouble(taxColumn.trim());
+						
+						taxValue.add(enteredTax);
+						
+						taxSum += enteredTax;
+						
+						}
+						catch (NumberFormatException e)
+						{
+							System.out.println("Invalid input :" + e);
+						}
+						
+					}
+				}
 			
+		if (taxSum==sumOfTaxes || taxSum==0.00) {
+			
+			 List<WebElement> elementss = driver.findElements(By.xpath("//mat-cell[@class='mat-cell cdk-column-Total mat-column-Total ng-star-inserted']"));
+			   
+			   List<Double> totalValue = new ArrayList<Double>(); // as we don't know how many revenues will occur so, list will take care.
+				
+				for (WebElement totalAmount : elementss)
+				{
+					 totalColumn = totalAmount.getText();
+					 
+					 if (totalColumn.equals("")||totalColumn.equals(" "))
+					 {
+							JavascriptExecutor js = (JavascriptExecutor) driver;
+							String script = "return arguments[0].value || arguments[0].textContent || arguments[0].innerText;";
+						    String totalAmt =  (String) js.executeScript(script,totalAmount);
+						    
+						    try {
+								
+						    	enteredTotalAmt = Double.parseDouble(totalAmt.trim());
+								
+						    	totalValue.add(enteredTotalAmt);
+								
+								totalSum += enteredTotalAmt;
+								
+								}
+								catch (NumberFormatException e)
+								{
+									System.out.println("Invalid input inside If Catch Block :" + e);
+								}
+				    }
+					
+			else {
+					try {
+					
+						enteredTotalAmt = Double.parseDouble(totalColumn.trim());
+					
+						totalValue.add(enteredTotalAmt);
+					
+					totalSum += enteredTotalAmt;
+					
+					}
+					catch (NumberFormatException e)
+					{
+						System.out.println("Invalid input :" + e);
+					}
+					
+				}
+			}
+				if (sum+taxSum==totalSum) {
+					
 			if (finalAmtValue==sum) 
 			{
 				System.out.println("Final Amount is equal with sum.of. Amount");
 			}
+		}	
+				
+	}
+		   }
 			else {
 				System.out.println("Final amount is not equals");
 			}
@@ -96,9 +203,6 @@ public class SalesInvSavePage extends BaseClass {
 				System.err.println(e);
 			}
 			
-		
-
-		
 		return this;
 
 	}

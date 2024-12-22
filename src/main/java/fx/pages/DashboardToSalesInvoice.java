@@ -42,7 +42,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 	
 	private  String hotelState;
 	
-	public String decimalValue;
+	public static String decimalValue;
 	
 	public  String revenueCode;
 	
@@ -52,7 +52,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 	
 	public String taxAmount,taxes;
 	
-	public double enteredTax,sumOfTaxes;
+	public static double enteredTax,sumOfTaxes;
 	
 	
 	
@@ -416,7 +416,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 
 		}
 		
-		public DashboardToSalesInvoice gstTaxRateType() throws InterruptedException 
+     public DashboardToSalesInvoice gstTaxRateType() throws InterruptedException 
 		{
 			Thread.sleep(3000);
 			String gstRateType = locateElement("Xpath", "//mat-select[@aria-label='GST Rate Type']").getText();
@@ -437,7 +437,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 
 		}
 		
-		 public DashboardToSalesInvoice	hsnsacField()
+	public DashboardToSalesInvoice	hsnsacField()
 		{
 			WebElement hsnfield = locateElement("Xpath", "//input[@placeholder='HSN/SAC']");
 			
@@ -463,7 +463,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 			return this;
 		}
 		 
-		 public DashboardToSalesInvoice findUOM() {
+	public DashboardToSalesInvoice findUOM() {
 			 
 			 WebElement UOM = locateElement("Xpath", "//div[@class='mat-form-field-infix']//input[@placeholder='UOM']");
 			 
@@ -509,8 +509,6 @@ public class DashboardToSalesInvoice extends BaseClass {
 	double decimalRoundOffValue = Math.round(decimal * 100.0) /100.0;
 	 
 	  decimalValue = String.valueOf(decimalRoundOffValue);
-	  
-	  
 	
 	 rate.sendKeys(decimalValue);
 	 

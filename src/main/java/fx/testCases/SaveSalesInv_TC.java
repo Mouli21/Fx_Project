@@ -2,8 +2,8 @@ package fx.testCases;
 
 import org.testng.annotations.Test;
 
-//import fx.baseMethods.SpecificMethods;
 import fx.pages.SalesInvSavePage;
+//import fx.baseMethods.SpecificMethods;
 
 public class SaveSalesInv_TC  {
 	
@@ -11,7 +11,8 @@ public class SaveSalesInv_TC  {
 	public void invoiceSave() 
 	{
 		new SalesInvSavePage()
-		.saveValidation();
+		//.serviceRevenue();
+		.saveValidation().viewAccountSummary().clickSave();
 
 	}
 

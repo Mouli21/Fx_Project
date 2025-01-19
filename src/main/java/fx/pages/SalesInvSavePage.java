@@ -1,5 +1,6 @@
 package fx.pages;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+
 import fx.base.BaseClass;
 
 
@@ -194,6 +200,7 @@ public class SalesInvSavePage extends DashboardToSalesInvoice {
 				
 	}
 		   }
+		   
 			else {
 				System.out.println("Final amount is not equals");
 			}
@@ -204,6 +211,47 @@ public class SalesInvSavePage extends DashboardToSalesInvoice {
 			}
 			
 		return this;
+
+	}
+	
+	public SalesInvSavePage viewAccountSummary() 
+	{
+		locateElement("Xpath", "//span[text()='View Account Summary']").click();
+		
+		WebElement accSumm = locateElement("Xpath", "//span[text()='Account Summary']");
+		
+		
+		wait= new WebDriverWait(driver, Duration.ofSeconds(20));
+		wait.until(ExpectedConditions.visibilityOf(accSumm));
+		
+		WebElement debitSummary = locateElement("xpath", "(//div[@fxflex='14%']//span)[1]");
+		String drSummary = debitSummary.getText();
+		WebElement creditSummary = locateElement("xpath", "(//div[@fxflex='14%']//span)[2]");
+		String crSummary = creditSummary.getText();
+		
+		if (drSummary.equals(crSummary)) 
+		{
+			Assert.assertTrue(true);
+		locateElement("xpath", "//div[@fxflex='5%']//span[text()='Back']").click();
+			
+		}
+		else {
+			Assert.assertFalse(false);
+		}
+
+		return this;
+	}
+	
+	public DashboardToSalesInvoice clickSave()
+	{
+		locateElement("XPATH", "//span[text()='Save']").click();
+		WebElement saveYes= locateElement("Xpath", "//button//span[text()='Yes']");
+		saveYes.click();
+		return  this;
+	}
+	
+	public void clickSavePrint() {
+		// NEED TO DEVELOP LOGIC WITH APPROVAL CONDITION
 
 	}
 	

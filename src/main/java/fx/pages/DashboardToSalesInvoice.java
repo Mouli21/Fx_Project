@@ -52,13 +52,17 @@ public class DashboardToSalesInvoice extends BaseClass {
 	
 	public String taxAmount,taxes;
 	
-	public static double enteredTax,sumOfTaxes;
+	public double enteredTax,sumOfTaxes;
 	
 	
+//	public DashboardToSalesInvoice(String revenueCode, String creditAmount, double sumOfTaxes )
+//	{
+//	    this.revenueCode = revenueCode;
+//		this.creditAmount = creditAmount;
+//		this.sumOfTaxes = sumOfTaxes;
+//		
+//	}
 	
-//	private int invoDate;
-//	
-//	private int transaDate;
 	
 	public DashboardToSalesInvoice salesInvocieList() throws InterruptedException {
 		
@@ -841,6 +845,11 @@ public class DashboardToSalesInvoice extends BaseClass {
 		}
 			 
 		 return new SalesInvSavePage();	
+
+	}
+	
+	public void savedInvVerify() {
+		// TODO Auto-generated method stub
 
 	}
 

@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -27,7 +28,9 @@ import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import fx.base.BaseClass;
@@ -36,7 +39,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 	
 	private String TTtext;
 	
-	private String transactionDate;
+	public static String transactionDate;
 	
 	private  String invoiceDate;
 	
@@ -48,11 +51,13 @@ public class DashboardToSalesInvoice extends BaseClass {
 	
 	public WebElement creditLedger,debitLedger;
 	
-	private String transactionAmount,debitAmount,creditAmount;
+	protected String transactionAmount,debitAmount,creditAmount;
 	
 	public String taxAmount,taxes;
 	
 	public double enteredTax,sumOfTaxes;
+	
+	public String invListDocumentDate,invListAmt;
 	
 	
 //	public DashboardToSalesInvoice(String revenueCode, String creditAmount, double sumOfTaxes )
@@ -848,9 +853,6 @@ public class DashboardToSalesInvoice extends BaseClass {
 
 	}
 	
-	public void savedInvVerify() {
-		// TODO Auto-generated method stub
-
+	
 	}
 
-}

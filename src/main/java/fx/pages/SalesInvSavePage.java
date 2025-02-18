@@ -214,8 +214,10 @@ public class SalesInvSavePage extends DashboardToSalesInvoice {
 
 	}
 	
-	public SalesInvSavePage viewAccountSummary() 
+	public SalesInvSavePage viewAccountSummary() throws InterruptedException 
 	{
+		
+		Thread.sleep(3000);
 		locateElement("Xpath", "//span[text()='View Account Summary']").click();
 		
 		WebElement accSumm = locateElement("Xpath", "//span[text()='Account Summary']");
@@ -247,8 +249,10 @@ public class SalesInvSavePage extends DashboardToSalesInvoice {
 		locateElement("XPATH", "//span[text()='Save']").click();
 		WebElement saveYes= locateElement("Xpath", "//button//span[text()='Yes']");
 		saveYes.click();
-		return  this;
+		return  new InvoiceList();
 	}
+	
+
 	
 	public void clickSavePrint() {
 		// NEED TO DEVELOP LOGIC WITH APPROVAL CONDITION

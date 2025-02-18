@@ -6,6 +6,7 @@
       <class name="fx.testCases.Login_TC"/>
       <class name="fx.testCases.CreateSales_TC"/>
        <class name="fx.testCases.SaveSalesInv_TC"/>
+       <class name="fx.testCases.SalesInvoiceList_TC"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

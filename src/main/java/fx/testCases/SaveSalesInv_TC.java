@@ -8,7 +8,7 @@ import fx.pages.SalesInvSavePage;
 public class SaveSalesInv_TC  {
 	
 	@Test
-	public void invoiceSave() 
+	public void invoiceSave() throws InterruptedException 
 	{
 		new SalesInvSavePage()
 		//.serviceRevenue();

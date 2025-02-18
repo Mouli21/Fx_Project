@@ -16,7 +16,7 @@ public class LoginPage extends BaseClass {
 	public LoginPage userName() {
 		
 		try {	
-			clearAndType(locateElement("xpath", "//input[@type='text']"),"tsctraining@idsnext.com");//By using locate element method we located the element using xath & the value for ID
+			clearAndType(locateElement("xpath", "//input[@type='text']"),"qatraining@idsnext.com");//By using locate element method we located the element using xath & the value for ID
 		
 		}catch (NoSuchElementException e) {
 			System.err.print(e);
@@ -32,7 +32,7 @@ public LoginPage password() {
 		
 		try {
 			
-			clearAndType(locateElement("xpath", "//input[@type='password']"),"Rs@tg723");
+			clearAndType(locateElement("xpath", "//input[@type='password']"),"Ye@kj930");
 			
 		} catch (NoSuchElementException e) {
 			System.err.print(e);

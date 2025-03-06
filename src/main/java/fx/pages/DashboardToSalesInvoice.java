@@ -193,6 +193,9 @@ public class DashboardToSalesInvoice extends BaseClass {
 		
 		List<WebElement> findElements = driver.findElements(By.xpath("//div[@role='listbox']//mat-option"));
 		
+		Random num = new Random();
+		int nextInt = num.nextInt(10);
+		
 		String taxCompany = dbConnection("Select * from Company where isdeleted=0 and [status]=1 and isgstapplicable=1"+"and pmscustcode="+pmscustcode, "CompanyCode");
 		
 		
@@ -408,8 +411,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 			{
 				
 				locateElement("Xpath", "(//mat-icon[@class='mat-icon material-icons mat-icon-no-color ng-star-inserted'])[4]").click();
-				locateElement("XPATH", "//span[@class='mat-option-text']").click();
-				
+				locateElement("XPATH", "//span[@class='mat-option-text']").click();				
 				
 			}
 			else
@@ -418,7 +420,6 @@ public class DashboardToSalesInvoice extends BaseClass {
 				System.out.println(dept.getText());
 				
 				System.out.println("Seciton & department are tagged..!");
-
 				
 			}
 			return this;

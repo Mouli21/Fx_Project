@@ -72,7 +72,9 @@ public class DashboardToSalesInvoice extends BaseClass {
 	public DashboardToSalesInvoice salesInvocieList() throws InterruptedException {
 		
 		try {
-		Thread.sleep(4000);
+		WebDriverWait  wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+		WebElement element1 = driver.findElement(By.xpath("//span[text()='Finance']"));
+		wait.until(ExpectedConditions.visibilityOf(element1));
 		clearAndType(locateElement("xpath", "//input[@type='text']"), "sales invoice");
 		}catch (ElementNotInteractableException e) {
 			throw e;
@@ -98,14 +100,13 @@ public class DashboardToSalesInvoice extends BaseClass {
 	{
 		try {
 			boolean displayed = locateElement("xpath", "//button[@class='FX-btnCreate mat-fab mat-accent']").isDisplayed();
-			Thread.sleep(4000);
 			if (displayed == true) {
 				locateElement("xpath", "//span[text()='+']").click();
 				Thread.sleep(4000);
 				//WebElement defaultTT = locateElement("xpath", "(//input[@type='text'])[2]"); //Sales field blank area
 				WebElement defaultTT = locateElement("xpath", "//button[@aria-label='Clear']");
 				defaultTT.click();
-				Thread.sleep(2000);
+				//Thread.sleep(2000);
 				//defaultTT.click();
 				WebElement dropDOwn = locateElement("xpath", "(//div[@class='mat-form-field-flex']//mat-icon)[2]");
 				dropDOwn.click();
@@ -251,7 +252,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 			
 			WebElement currencyClear = locateElement("xpath", "(//button[@aria-label='Clear'])[3]");
 			currencyClear.click();
-			Thread.sleep(2000);
+			//Thread.sleep(2000);
 			
 			WebElement currencyDropDown = locateElement("xpath", "(//div[@class='mat-form-field-flex']//mat-icon)[4]");
 			currencyDropDown.click();
@@ -313,7 +314,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 			  
 			   locateElement("XPATH", "(//div[@class='mat-form-field-flex']//mat-icon)[5]").click();
 			   
-			   Thread.sleep(2000);
+		//	   Thread.sleep(2000);
 			   
 			   try {
 			   
@@ -348,7 +349,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 		{
 			locateElement("XPATH", "(//div[@class='mat-form-field-flex']//mat-icon)[6]").click();
 			
-			Thread.sleep(2000);
+			//Thread.sleep(2000);
 			
 			locateElement("Xpath", "((//div[@role='listbox'])//span)[3]").click();
 			
@@ -386,8 +387,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 		{
 			
 			String listRevenue = rev.getText();
-		//	System.out.println(listRevenue);
-			//Thread.sleep(2000)
+
 			if (listRevenue.startsWith(revenueCode)) 
 			{
 				click(rev);
@@ -428,7 +428,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 		
      public DashboardToSalesInvoice gstTaxRateType() throws InterruptedException 
 		{
-			Thread.sleep(3000);
+			//Thread.sleep(3000);
 			String gstRateType = locateElement("Xpath", "//mat-select[@aria-label='GST Rate Type']").getText();
 			
 			if (gstRateType.equalsIgnoreCase("SAC")) 
@@ -479,11 +479,7 @@ public class DashboardToSalesInvoice extends BaseClass {
 			 
 			 UOM.click();
 			 
-		//	System.out.println( UOM.getText());
-			 
-		//	if( UOM.getText()=="" ||UOM.getText()==" " )
-			//{
-			
+
 		      List<WebElement> uomList = driver.findElements(By.xpath("(//div[@class='cdk-overlay-pane mat-autocomplete-panel-above'])//mat-option//span")); //(//div[@class='cdk-overlay-pane'])[2]//mat-option//span[text()=' NOS - NUMBERS ']
 		      
 		      for (WebElement list : uomList) 
